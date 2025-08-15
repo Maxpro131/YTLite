@@ -40,6 +40,12 @@ on:
         required: true
         type: string
 
+      version:
+        describtion: "YouTube Version"
+        default: ""
+        required: true
+        type: string
+
       tweak_version:
         description: "The version of the tweak to use. Enter the version manually from dayanch96/YTLite/releases or leave default"
         default: "5.2b3"
@@ -318,89 +324,50 @@ jobs:
       - name: Checkout repo for pushing updates
         uses: actions/checkout@v4
         with:
-          # checkout to a known folder 'repo' so wir sicher arbeiten
           path: repo
-          # ensure the token is available for push
           persist-credentials: true
           token: ${{ secrets.GITHUB_TOKEN }}
           fetch-depth: 0
 
-      - name: Debug + Set current date in ClassicSource.json and push
+      - name: Update ClassicSource.json date and version, then push
         run: |
           set -euo pipefail
 
-          # Pfad zur JSON in diesem frisch ausgecheckten repo-Ordner
           FILE="repo/AltSource/ClassicSource.json"
-
-          echo "Workspace: $GITHUB_WORKSPACE"
-          echo "Inspecting repo folder..."
-          ls -la repo || true
-          echo "Inspecting AltSource folder..."
-          ls -la repo/AltSource || true
 
           if [ ! -f "$FILE" ]; then
             echo "::error::ClassicSource.json not found at $FILE"
-            echo "Top-level listing:"
-            ls -R || true
             exit 1
           fi
 
-          echo "---- Current top of file (first 40 lines) ----"
-          sed -n '1,40p' "$FILE" || true
-          echo "---------------------------------------------"
-
-          # current date UTC ISO 8601 with Z (AltStore friendly)
           current_date=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
-          echo "Setting new date: $current_date"
+          new_version="${{ inputs.version }}"
 
-          # backup original (for logs)
+          echo "Setting new date: $current_date"
+          echo "Setting new version: $new_version"
+
           cp "$FILE" "$FILE.bak"
 
-          # Replace the exact field apps[0].versions[0].date
-          if command -v jq >/dev/null 2>&1; then
-            jq --arg date "$current_date" '.apps[0].versions[0].date = $date' "$FILE" > "$FILE.tmp"
-            mv "$FILE.tmp" "$FILE"
-            echo "jq update succeeded."
-          else
-            echo "::error::jq not found in runner. Installing jq..."
-            # try apt-get (macOS runners won't have apt; GitHub macOS has jq preinstalled usually)
-            if [ "$(uname -s)" = "Linux" ]; then
-              sudo apt-get update && sudo apt-get install -y jq
-              jq --arg date "$current_date" '.apps[0].versions[0].date = $date' "$FILE" > "$FILE.tmp"
-              mv "$FILE.tmp" "$FILE"
-            else
-              echo "::error::Unable to install jq on this runner (non-Linux). Please ensure jq is available."
-              exit 1
-            fi
-          fi
+          # Datum & Version setzen
+          jq --arg date "$current_date" --arg version "$new_version" \
+            '.apps[0].versions[0].date = $date | .apps[0].versions[0].version = $version' \
+            "$FILE" > "$FILE.tmp"
+
+          mv "$FILE.tmp" "$FILE"
 
           echo "---- Diff (old -> new) ----"
           git --no-pager diff --no-index -- "$FILE.bak" "$FILE" || true
           echo "---------------------------"
 
-          # Commit & push
           cd repo
-          git status --porcelain
           git config user.email "actions@github.com"
           git config user.name "GitHub Actions"
-
           git add AltSource/ClassicSource.json
-          if git commit -m "CI: update ClassicSource.json date to $current_date" ; then
-            echo "Commit created, pushing..."
-            # Push using the GITHUB_TOKEN creds provided by actions/checkout
-            git push origin HEAD:${{ github.ref_name }} || {
-              echo "::error::Push failed. Check permissions and branch protection rules."
-              git remote -v
-              exit 1
-            }
-            echo "Push succeeded."
+          if git commit -m "CI: update ClassicSource.json date to $current_date and version to $new_version"; then
+            git push origin HEAD:${{ github.ref_name }}
           else
-            echo "No changes to commit (maybe date was already current)."
+            echo "No changes to commit."
           fi
-
-          # show last few commits touching the file
-          echo "Recent commits touching the file:"
-          git log -n 5 --pretty=oneline -- AltSource/ClassicSource.json || true
 
       - name: Output Release URL
         run: |
