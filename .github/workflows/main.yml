@@ -324,6 +324,7 @@ jobs:
       - name: Upload to GitHub Releases
         uses: softprops/action-gh-release@v2.0.1
         with:
+          tag_name: ytp
           name: YouTubePlus v${{ inputs.tweak_version }} (${{ github.run_number }})
           files: YouTubePlus_${{ inputs.tweak_version }}.ipa
           draft: false
