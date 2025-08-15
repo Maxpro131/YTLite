@@ -40,6 +40,12 @@ on:
         required: true
         type: string
 
+      version:
+        description: "YouTube Version"
+        default: ""
+        required: true
+        type: string
+
       tweak_version:
         description: "The version of the tweak to use. Enter the version manually from dayanch96/YTLite/releases or leave default"
         default: "5.2b3"
@@ -309,32 +315,6 @@ jobs:
           files: YouTubePlus.ipa
           draft: false
 
-      - name: Extract app version from IPA
-        run: |
-          set -euo pipefail
-          
-          IPA_FILE="YouTubePlus.ipa"
-          if [ ! -f "$IPA_FILE" ]; then
-            echo "::error::IPA file not found!"
-            ls -la
-            exit 1
-          fi
-
-          echo "Found IPA: $IPA_FILE"
-          unzip -q "$IPA_FILE" -d ipa_extract
-          
-          PLIST_PATH=$(find ipa_extract/Payload -name "Info.plist" | head -n 1)
-          if [ ! -f "$PLIST_PATH" ]; then
-            echo "::error::Info.plist not found inside IPA"
-            exit 1
-          fi
-
-          echo "Found Info.plist: $PLIST_PATH"
-          version=$(plutil -extract CFBundleShortVersionString raw "$PLIST_PATH")
-          echo "Extracted version: $version"
-
-          echo "APP_VERSION=$version" >> $GITHUB_ENV
-
       - name: Checkout repo for pushing updates
         uses: actions/checkout@v4
         with:
@@ -355,13 +335,14 @@ jobs:
           fi
 
           current_date=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
-          new_version="${APP_VERSION:-unknown}"
+          new_version="${{ inputs.version }}"
 
           echo "Setting new date: $current_date"
           echo "Setting new version: $new_version"
 
           cp "$FILE" "$FILE.bak"
 
+          # Datum & Version setzen
           jq --arg date "$current_date" --arg version "$new_version" \
             '.apps[0].versions[0].date = $date | .apps[0].versions[0].version = $version' \
             "$FILE" > "$FILE.tmp"
