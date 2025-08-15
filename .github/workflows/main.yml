@@ -320,6 +320,13 @@ jobs:
 
          jq --arg date "$current_date" '.apps[0].versions[0].date = $date' "$file_path" > tmp.json
          mv tmp.json "$file_path"
+         
+         cd "${{ github.workspace }}/main"
+         git config --local user.email "actions@github.com"
+         git config --local user.name "GitHub Actions"
+         git add AltSource/ClassicSource.json
+         git commit -m "Update ClassicSource.json date to $current_date" || echo "No changes to commit"
+         git push
           
       - name: Upload to GitHub Releases
         uses: softprops/action-gh-release@v2.0.1
