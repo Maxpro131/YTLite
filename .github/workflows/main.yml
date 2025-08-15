@@ -309,9 +309,17 @@ jobs:
 
       - name: Set current date in ClassicSource.json
         run: |
-          current_date=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
-          jq --arg date "$current_date" '.apps[0].date = $date' AltSource/ClassicSource.json > tmp.json
-          mv tmp.json main/AltSource/ClassicSource.json
+         current_date=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+         file_path="${{ github.workspace }}/main/AltSource/ClassicSource.json"
+
+         if [ ! -f "$file_path" ]; then
+         echo "::error::ClassicSource.json not found at $file_path"
+         ls -R "${{ github.workspace }}"
+         exit 1
+         fi
+
+         jq --arg date "$current_date" '.apps[0].date = $date' "$file_path" > tmp.json
+         mv tmp.json "$file_path"
           
       - name: Upload to GitHub Releases
         uses: softprops/action-gh-release@v2.0.1
