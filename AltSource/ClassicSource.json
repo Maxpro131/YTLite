@@ -28,6 +28,11 @@
                     "minOSVersion": "16.0"
                 }
             ],
+            "appPermissions": {
+                "entitlements": [
+                    "com.apple.security.application-groups",
+                    "com.apple.developer.siri"
+                ],
                 "privacy": {
                     "NSPhotoLibraryUsageDescription": "YouTubePlus speichert deine Videos in deinen Fotos",
                     "NSCameraUsageDescription": "Keine Ahnung wozu YouTube das braucht",
