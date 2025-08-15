@@ -1,44 +1,44 @@
 {
-    "name": "YouTubePlus",
-    "subtitle": "Meine YouTube Premium IPAs",
-    "description": "Hier wird immer meine neueste YouTube Premium IPA sein",
-    "iconURL": "https://raw.githubusercontent.com/Maxpro131/YTLite/refs/heads/main/AltSource/Bild.png",
-    "headerURL": "https://f000.backblazeb2.com/file/rileytestut/ExampleSource/OceanHeader.png",
-    "website": "https://github.com/Maxpro131/YTLite",
-    "tintColor": "#4185A9",
-    "featuredApps": [
-        "com.google.ios.youtube"
-    ],
-    "apps": [
+  "name": "YouTubePlus",
+  "subtitle": "Meine YouTube Premium IPAs",
+  "description": "Hier wird immer meine neueste YouTube Premium IPA sein",
+  "iconURL": "https://raw.githubusercontent.com/Maxpro131/YTLite/refs/heads/main/AltSource/Bild.png",
+  "headerURL": "https://f000.backblazeb2.com/file/rileytestut/ExampleSource/OceanHeader.png",
+  "website": "https://github.com/Maxpro131/YTLite",
+  "tintColor": "#4185A9",
+  "featuredApps": [
+    "com.google.ios.youtube"
+  ],
+  "apps": [
+    {
+      "name": "YouTube",
+      "bundleIdentifier": "com.google.ios.youtube",
+      "developerName": "Maxim Bogatyrev",
+      "subtitle": "Neueste YouTube Premium IPA",
+      "localizedDescription": "Die YouTube Premium IPA von meiner GitHub Repo",
+      "iconURL": "https://raw.githubusercontent.com/Maxpro131/YTLite/refs/heads/main/AltSource/Bild.png",
+      "tintColor": "#5CA399",
+      "versions": [
         {
-            "name": "YouTube",
-            "bundleIdentifier": "com.google.ios.youtube",
-            "developerName": "Maxim Bogatyrev",
-            "subtitle": "Neueste YouTube Premium IPA",
-            "localizedDescription": "Die YouTube Premium IPA von meiner GitHub Repo",
-            "iconURL": "https://raw.githubusercontent.com/Maxpro131/YTLite/refs/heads/main/AltSource/Bild.png",
-            "tintColor": "#5CA399",
-            "versions": [
-                {
-                    "version": "neueste",
-                    "date": "2025-8-15T11:24:53Z",
-                    "size": 20000000,
-                    "downloadURL": "https://github.com/Maxpro131/YTLite/releases/download/ytp/YouTubePlus.ipa",
-                    "localizedDescription": "New features and bug fixes.",
-                    "minOSVersion": "16.0"
-                }
-            ],
-            "appPermissions": {
-                "entitlements": [
-                    "com.apple.security.application-groups",
-                    "com.apple.developer.siri"
-                ],
-                "privacy": {
-                    "NSPhotoLibraryUsageDescription": "YouTubePlus speichert deine Videos in deinen Fotos",
-                    "NSCameraUsageDescription": "Keine Ahnung wozu YouTube das braucht",
-                    "NSMicrophoneUsageDescription": "Keine Ahnung wozu YouTube das braucht"
-                }
-            }
+          "version": "neueste",
+          "date": "2025-08-15T17:10:57Z",
+          "size": 20000000,
+          "downloadURL": "https://github.com/Maxpro131/YTLite/releases/download/ytp/YouTubePlus.ipa",
+          "localizedDescription": "New features and bug fixes.",
+          "minOSVersion": "16.0"
         }
-    ]
+      ],
+      "appPermissions": {
+        "entitlements": [
+          "com.apple.security.application-groups",
+          "com.apple.developer.siri"
+        ],
+        "privacy": {
+          "NSPhotoLibraryUsageDescription": "YouTubePlus speichert deine Videos in deinen Fotos",
+          "NSCameraUsageDescription": "Keine Ahnung wozu YouTube das braucht",
+          "NSMicrophoneUsageDescription": "Keine Ahnung wozu YouTube das braucht"
+        }
+      }
+    }
+  ]
 }
