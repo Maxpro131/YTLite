@@ -318,7 +318,7 @@ jobs:
          exit 1
          fi
 
-         jq --arg date "$current_date" '.apps[0].date = $date' "$file_path" > tmp.json
+         jq --arg date "$current_date" '.apps[0].versions[0].date = $date' "$file_path" > tmp.json
          mv tmp.json "$file_path"
           
       - name: Upload to GitHub Releases
