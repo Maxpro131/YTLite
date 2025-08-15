@@ -311,7 +311,7 @@ jobs:
         run: |
           current_date=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
           jq --arg date "$current_date" '.apps[0].date = $date' AltSource/ClassicSource.json > tmp.json
-          mv tmp.json AltSource/ClassicSource.json
+          mv tmp.json /AltSource/ClassicSource.json
           
       - name: Upload to GitHub Releases
         uses: softprops/action-gh-release@v2.0.1
