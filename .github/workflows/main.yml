@@ -307,6 +307,12 @@ jobs:
 
           cyan -i youtube.ipa -o YouTubePlus_${{ inputs.tweak_version }}.ipa -uwef $tweaks -n "${{ inputs.display_name }}" -b ${{ inputs.bundle_id }}
 
+      - name: Set current date in ClassicSource.json
+        run: |
+          current_date=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+          jq --arg date "$current_date" '.apps[0].date = $date' AltSource/ClassicSource.json > tmp.json
+          mv tmp.json AltSource/ClassicSource.json
+          
       - name: Upload to GitHub Releases
         uses: softprops/action-gh-release@v2.0.1
         with:
