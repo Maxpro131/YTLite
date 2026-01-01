@@ -308,7 +308,7 @@ jobs:
       - name: Upload IPA as workflow artifact
         uses: actions/upload-artifact@v4
         with:
-          name: YouTubePlus-${{ inputs.tweak_version }}.ipa
+          name: YouTubePlus.ipa
           path: YouTubePlus.ipa
           retention-days: 7
 
@@ -320,7 +320,7 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           fetch-depth: 0
 
-      - name: Update ClassicSource.json date and version, then push
+      - name: Update Source.json date and version, then push
         run: |
           set -euo pipefail
 
