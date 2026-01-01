@@ -305,13 +305,12 @@ jobs:
 
           cyan -i youtube.ipa -o YouTubePlus.ipa -uwef $tweaks -n "${{ inputs.display_name }}" -b ${{ inputs.bundle_id }}
           
-      - name: Upload to GitHub Releases
-        uses: softprops/action-gh-release@v2.0.1
+      - name: Upload IPA as workflow artifact
+        uses: actions/upload-artifact@v4
         with:
-          tag_name: ytp
-          name: YouTubePlus v${{ inputs.tweak_version }} (${{ github.run_number }})
-          files: YouTubePlus.ipa
-          draft: false
+          name: YouTubePlus-${{ inputs.tweak_version }}.ipa
+          path: YouTubePlus.ipa
+          retention-days: 7
 
       - name: Checkout repo for pushing updates
         uses: actions/checkout@v4
@@ -361,6 +360,7 @@ jobs:
             echo "No changes to commit."
           fi
 
-      - name: Output Release URL
+      - name: Output artifact info
         run: |
-          echo "::notice::Release available at: https://github.com/${{ github.repository }}/releases"
+          echo "::notice::The IPA was uploaded as a workflow artifact named: YouTubePlus-${{ inputs.tweak_version }}.ipa"
+          echo "::notice::Download it from the Actions run page (this workflow run) -> Artifacts."
