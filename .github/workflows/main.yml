@@ -324,10 +324,10 @@ jobs:
         run: |
           set -euo pipefail
 
-          FILE="repo/AltSource/ClassicSource.json"
+          FILE="repo/Source/Source.json"
 
           if [ ! -f "$FILE" ]; then
-            echo "::error::ClassicSource.json not found at $FILE"
+            echo "::error::Source.json not found at $FILE"
             exit 1
           fi
 
@@ -353,8 +353,8 @@ jobs:
           cd repo
           git config user.email "actions@github.com"
           git config user.name "GitHub Actions"
-          git add AltSource/ClassicSource.json
-          if git commit -m "CI: update ClassicSource.json date to $current_date and version to $new_version"; then
+          git add Source/Source.json
+          if git commit -m "CI: update Source.json date to $current_date and version to $new_version"; then
             git push origin HEAD:${{ github.ref_name }}
           else
             echo "No changes to commit."
